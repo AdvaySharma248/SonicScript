@@ -1,0 +1,206 @@
+@import "tailwindcss";
+
+/* ============================================
+   SonicScript — Global Design Tokens & Styles
+   ============================================ */
+
+/* Custom CSS Variables (Design Tokens) */
+@theme {
+  --color-sonic-dark: #0a0a0f;
+  --color-sonic-darker: #060609;
+  --color-sonic-card: rgba(255, 255, 255, 0.03);
+  --color-sonic-card-hover: rgba(255, 255, 255, 0.06);
+  --color-sonic-border: rgba(255, 255, 255, 0.08);
+  --color-sonic-border-hover: rgba(255, 255, 255, 0.15);
+  --color-sonic-text: #e4e4e7;
+  --color-sonic-text-dim: #71717a;
+  --color-sonic-accent: #8b5cf6;
+  --color-sonic-accent-light: #a78bfa;
+  --color-sonic-accent-glow: rgba(139, 92, 246, 0.3);
+  --color-sonic-cyan: #06b6d4;
+  --color-sonic-cyan-glow: rgba(6, 182, 212, 0.3);
+  --color-sonic-pink: #ec4899;
+  --color-sonic-success: #34d399;
+
+  --font-sans: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+/* Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-sonic-dark);
+  color: var(--color-sonic-text);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-sonic-darker);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-sonic-border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-sonic-border-hover);
+}
+
+/* ============================================
+   Utility Classes
+   ============================================ */
+
+/* Glassmorphism Card */
+.glass-card {
+  background: var(--color-sonic-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--color-sonic-border);
+  border-radius: 16px;
+  transition: all 0.3s ease;
+}
+
+.glass-card:hover {
+  background: var(--color-sonic-card-hover);
+  border-color: var(--color-sonic-border-hover);
+  transform: translateY(-2px);
+}
+
+/* Gradient Text */
+.gradient-text {
+  background: linear-gradient(135deg, var(--color-sonic-accent-light) 0%, var(--color-sonic-cyan) 50%, var(--color-sonic-pink) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glow Effects */
+.glow-accent {
+  box-shadow: 0 0 20px var(--color-sonic-accent-glow), 0 0 60px rgba(139, 92, 246, 0.1);
+}
+
+.glow-cyan {
+  box-shadow: 0 0 20px var(--color-sonic-cyan-glow), 0 0 60px rgba(6, 182, 212, 0.1);
+}
+
+/* Animated Background Gradient Orbs */
+.bg-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.15;
+  pointer-events: none;
+}
+
+.bg-orb-1 {
+  width: 500px;
+  height: 500px;
+  background: var(--color-sonic-accent);
+  top: -10%;
+  left: -10%;
+  animation: float-orb 15s ease-in-out infinite;
+}
+
+.bg-orb-2 {
+  width: 400px;
+  height: 400px;
+  background: var(--color-sonic-cyan);
+  bottom: -5%;
+  right: -5%;
+  animation: float-orb 20s ease-in-out infinite reverse;
+}
+
+.bg-orb-3 {
+  width: 300px;
+  height: 300px;
+  background: var(--color-sonic-pink);
+  top: 40%;
+  left: 50%;
+  animation: float-orb 18s ease-in-out infinite 5s;
+}
+
+/* ============================================
+   Animations
+   ============================================ */
+
+@keyframes float-orb {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -30px) scale(1.05); }
+  66% { transform: translate(-20px, 20px) scale(0.95); }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px var(--color-sonic-accent-glow); }
+  50% { box-shadow: 0 0 40px var(--color-sonic-accent-glow), 0 0 80px rgba(139, 92, 246, 0.15); }
+}
+
+@keyframes waveform {
+  0%, 100% { height: 12px; }
+  50% { height: 32px; }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.8s ease-out forwards;
+}
+
+.animate-fade-in-up-delay-1 {
+  animation: fade-in-up 0.8s ease-out 0.15s forwards;
+  opacity: 0;
+}
+
+.animate-fade-in-up-delay-2 {
+  animation: fade-in-up 0.8s ease-out 0.3s forwards;
+  opacity: 0;
+}
+
+.animate-fade-in-up-delay-3 {
+  animation: fade-in-up 0.8s ease-out 0.45s forwards;
+  opacity: 0;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+/* Waveform bars animation */
+.waveform-bar {
+  width: 3px;
+  background: linear-gradient(to top, var(--color-sonic-accent), var(--color-sonic-cyan));
+  border-radius: 2px;
+  animation: waveform 1.2s ease-in-out infinite;
+}
+
+.waveform-bar:nth-child(2) { animation-delay: 0.1s; }
+.waveform-bar:nth-child(3) { animation-delay: 0.2s; }
+.waveform-bar:nth-child(4) { animation-delay: 0.3s; }
+.waveform-bar:nth-child(5) { animation-delay: 0.4s; }
+.waveform-bar:nth-child(6) { animation-delay: 0.3s; }
+.waveform-bar:nth-child(7) { animation-delay: 0.2s; }
