@@ -2,12 +2,18 @@
   "name": "sonicscript-server",
   "version": "1.0.0",
   "description": "SonicScript backend API — Express.js server for speech-to-text transcription",
+  "type": "module",
   "main": "src/app.js",
   "scripts": {
     "start": "node src/app.js",
     "dev": "nodemon src/app.js"
   },
-  "keywords": ["speech-to-text", "transcription", "express", "mern"],
+  "keywords": [
+    "speech-to-text",
+    "transcription",
+    "express",
+    "mern"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
@@ -15,6 +21,7 @@
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "mongoose": "^8.9.5",
+    "morgan": "^1.10.1",
     "multer": "^1.4.5-lts.1"
   },
   "devDependencies": {
