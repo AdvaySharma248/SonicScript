@@ -6,15 +6,15 @@
 // - JSON body parsing (to read JSON data from requests)
 // - Morgan (logs every HTTP request for debugging)
 // - API routes (organized by feature)
+// - MongoDB database connection via Mongoose
 // - Centralized error handling middleware
 //
-// WHAT'S CHANGED FROM DAY 1?
-// --------------------------
-// ✅ Converted from CommonJS (require) → ES Modules (import/export)
-// ✅ Added morgan for request logging
-// ✅ Added upload route (/api/upload)
-// ✅ Moved error handler to its own file
-// ✅ Added 404 catch-all for undefined routes
+// WHAT'S CHANGED FROM DAY 2 → DAY 3?
+// ------------------------------------
+// ✅ Connected MongoDB via connectDB() — server now talks to the database
+// ✅ Added transcription routes (/api/transcriptions)
+// ✅ Server only starts AFTER database connects successfully
+// ✅ Added Mongoose disconnect handler for graceful shutdown
 //
 // ES MODULES vs COMMONJS:
 // -----------------------
@@ -34,7 +34,9 @@ import { fileURLToPath } from 'url';
 import morgan from 'morgan';
 
 // Import our custom modules
+import connectDB from './config/db.js';
 import uploadRoutes from './routes/upload.routes.js';
+import transcriptionRoutes from './routes/transcription.routes.js';
 import errorHandler from './middleware/errorHandler.js';
 
 // -------------------------------------------
@@ -122,8 +124,14 @@ app.get('/api/health', (req, res) => {
 // Endpoint: POST http://localhost:5000/api/upload
 app.use('/api/upload', uploadRoutes);
 
-// Future routes will be added here:
-// app.use('/api/transcriptions', transcriptionRoutes);
+// Transcription Routes — CRUD operations for transcriptions
+// Endpoints:
+//   POST   /api/transcriptions       → Create a new transcription
+//   GET    /api/transcriptions       → Get all transcriptions
+//   GET    /api/transcriptions/:id   → Get one transcription
+//   DELETE /api/transcriptions/:id   → Delete a transcription
+//   POST   /api/transcriptions/seed  → Seed dummy data (dev)
+app.use('/api/transcriptions', transcriptionRoutes);
 
 // =============================================
 // 404 HANDLER — Catch undefined routes
@@ -145,16 +153,35 @@ app.all('*', (req, res) => {
 app.use(errorHandler);
 
 // =============================================
-// START THE SERVER
+// START THE SERVER (with Database Connection)
 // =============================================
+// WHY connect THEN listen?
+// -------------------------
+// If the database connection fails, there's no point starting
+// the server — your APIs can't save or fetch data.
+// By connecting first, we "fail fast" with clear error messages.
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-  console.log(`\n🎙️  SonicScript server is running!`);
-  console.log(`📡  http://localhost:${PORT}`);
-  console.log(`❤️   Health check: http://localhost:${PORT}/api/health`);
-  console.log(`📁  Upload endpoint: POST http://localhost:${PORT}/api/upload`);
-  console.log(`🔧  Environment: ${process.env.NODE_ENV || 'development'}\n`);
-});
+const startServer = async () => {
+  try {
+    // Step 1: Connect to MongoDB
+    await connectDB();
+
+    // Step 2: Only start listening AFTER database is connected
+    app.listen(PORT, () => {
+      console.log(`\n🎙️  SonicScript server is running!`);
+      console.log(`📡  http://localhost:${PORT}`);
+      console.log(`❤️   Health check: http://localhost:${PORT}/api/health`);
+      console.log(`📁  Upload endpoint: POST http://localhost:${PORT}/api/upload`);
+      console.log(`📝  Transcriptions: http://localhost:${PORT}/api/transcriptions`);
+      console.log(`🔧  Environment: ${process.env.NODE_ENV || 'development'}\n`);
+    });
+  } catch (error) {
+    console.error('❌ Failed to start server:', error.message);
+    process.exit(1);
+  }
+};
+
+startServer();
 
 export default app;

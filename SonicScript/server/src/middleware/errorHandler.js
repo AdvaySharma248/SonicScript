@@ -21,6 +21,13 @@
 // 1. You call next(error) in a route → Express skips to this handler
 // 2. You throw new AppError('message', 400) → caught and forwarded here
 // 3. Multer rejects a file → Multer calls next(error) automatically
+// 4. Mongoose validation fails → catchAsync forwards the error here
+//
+// WHAT'S NEW IN DAY 3?
+// --------------------
+// ✅ Added Mongoose ValidationError handling
+// ✅ Added Mongoose CastError handling (invalid ObjectId)
+// ✅ Added MongoDB duplicate key error handling
 //
 // COMMON BEGINNER MISTAKES:
 // -------------------------
@@ -30,6 +37,55 @@
 // ===========================================
 
 import multer from 'multer';
+
+// -------------------------------------------
+// Helper: Handle Mongoose Validation Errors
+// -------------------------------------------
+// When schema validation fails (e.g., missing required field,
+// invalid enum value), Mongoose throws a ValidationError with
+// details about EVERY field that failed.
+//
+// We extract those details and create a user-friendly message.
+//
+// Example input error:
+//   "Transcription validation failed: transcript: Transcript text is required"
+// Example output message:
+//   "Invalid input: Transcript text is required"
+const handleValidationError = (err) => {
+  const errors = Object.values(err.errors).map((el) => el.message);
+  const message = `Invalid input: ${errors.join('. ')}`;
+  return { statusCode: 400, message };
+};
+
+// -------------------------------------------
+// Helper: Handle Mongoose CastError
+// -------------------------------------------
+// This happens when someone sends an invalid MongoDB ObjectId.
+// Example: GET /api/transcriptions/not-a-valid-id
+//
+// MongoDB ObjectIds are 24-character hex strings like:
+//   "665abc123def456789abcdef"
+// Anything else causes a CastError.
+const handleCastError = (err) => {
+  const message = `Invalid ${err.path}: "${err.value}". Expected a valid MongoDB ObjectId.`;
+  return { statusCode: 400, message };
+};
+
+// -------------------------------------------
+// Helper: Handle MongoDB Duplicate Key Error
+// -------------------------------------------
+// This happens when you try to insert a document that violates
+// a unique index. For example, if email must be unique and
+// someone tries to register with an existing email.
+//
+// Error code 11000 = duplicate key error
+const handleDuplicateKeyError = (err) => {
+  // Extract the field name and value from the error
+  const field = Object.keys(err.keyValue)[0];
+  const value = err.keyValue[field];
+  const message = `Duplicate value: "${value}" already exists for field "${field}". Please use a different value.`;
+  return { statusCode: 400, message };
+};
 
 /**
  * Centralized error handler — catches ALL errors from routes/middleware
@@ -85,6 +141,43 @@ const errorHandler = (err, req, res, next) => {
     return res.status(400).json({
       status: 'fail',
       message: err.message,
+    });
+  }
+
+  // -------------------------------------------
+  // Handle Mongoose Validation Errors
+  // -------------------------------------------
+  // These occur when data doesn't match the schema rules
+  // (e.g., missing required field, value outside enum, etc.)
+  if (err.name === 'ValidationError') {
+    const { statusCode, message } = handleValidationError(err);
+    return res.status(statusCode).json({
+      status: 'fail',
+      message,
+    });
+  }
+
+  // -------------------------------------------
+  // Handle Mongoose CastError (Invalid ObjectId)
+  // -------------------------------------------
+  // Occurs when an invalid ID format is passed to findById()
+  if (err.name === 'CastError') {
+    const { statusCode, message } = handleCastError(err);
+    return res.status(statusCode).json({
+      status: 'fail',
+      message,
+    });
+  }
+
+  // -------------------------------------------
+  // Handle MongoDB Duplicate Key Error
+  // -------------------------------------------
+  // Error code 11000 = unique constraint violation
+  if (err.code === 11000) {
+    const { statusCode, message } = handleDuplicateKeyError(err);
+    return res.status(statusCode).json({
+      status: 'fail',
+      message,
     });
   }
 
