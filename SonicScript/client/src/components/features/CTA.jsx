@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 export default function CTA() {
   return (
     <section id="cta" className="py-20 sm:py-28 px-4">
@@ -13,7 +15,7 @@ export default function CTA() {
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-sonic-accent/20 bg-sonic-accent/5 mb-6">
               <span className="text-sm">🎉</span>
               <span className="text-xs sm:text-sm text-sonic-accent-light font-medium">
-                $200 Free Credits — No credit card required
+                100% Free Forever — No API keys needed
               </span>
             </div>
 
@@ -28,12 +30,13 @@ export default function CTA() {
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <button
+              <Link
+                to="/record"
                 id="cta-get-started"
                 className="w-full sm:w-auto px-10 py-4 text-base font-semibold text-white bg-gradient-to-r from-sonic-accent to-sonic-cyan rounded-2xl hover:opacity-90 transition-all duration-300 hover:shadow-xl hover:shadow-sonic-accent-glow hover:-translate-y-0.5 cursor-pointer"
               >
                 Get Started Free →
-              </button>
+              </Link>
               <a
                 href="https://github.com/AdvaySharma248/SonicScript"
                 id="cta-github"

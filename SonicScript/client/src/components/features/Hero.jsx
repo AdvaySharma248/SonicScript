@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 export default function Hero() {
   return (
     <section id="hero" className="relative pt-28 sm:pt-36 pb-20 sm:pb-28 px-4">
@@ -6,7 +8,7 @@ export default function Hero() {
         <div className="animate-fade-in-up inline-flex items-center gap-2 px-4 py-2 rounded-full border border-sonic-border bg-white/5 backdrop-blur-sm mb-8">
           <span className="w-2 h-2 rounded-full bg-sonic-success animate-pulse" />
           <span className="text-xs sm:text-sm text-sonic-text-dim font-medium">
-            Powered by Deepgram AI
+            Free AI Transcription — No API Keys Needed
           </span>
         </div>
 
@@ -26,13 +28,13 @@ export default function Hero() {
 
         {/* CTA Buttons */}
         <div className="animate-fade-in-up-delay-2 flex flex-col sm:flex-row items-center justify-center gap-4">
-          <a
-            href="#cta"
+          <Link
+            to="/record"
             id="hero-cta-primary"
             className="w-full sm:w-auto px-8 py-4 text-base font-semibold text-white bg-gradient-to-r from-sonic-accent to-sonic-cyan rounded-2xl hover:opacity-90 transition-all duration-300 hover:shadow-xl hover:shadow-sonic-accent-glow hover:-translate-y-0.5 animate-pulse-glow"
           >
             🎤 Start Transcribing
-          </a>
+          </Link>
           <a
             href="#how-it-works"
             id="hero-cta-secondary"

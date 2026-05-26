@@ -204,3 +204,78 @@ body {
 .waveform-bar:nth-child(5) { animation-delay: 0.4s; }
 .waveform-bar:nth-child(6) { animation-delay: 0.3s; }
 .waveform-bar:nth-child(7) { animation-delay: 0.2s; }
+
+/* ============================================
+   Day 4 — Recording Page Animations
+   ============================================ */
+
+/* Shimmer loading effect for processing states */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(139, 92, 246, 0.08) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+/* Recording pulse — concentric ring expansion */
+@keyframes recording-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+
+.recording-glow-ring {
+  animation: recording-pulse 2s ease-out infinite;
+}
+
+/* Smooth transcript scroll area */
+.transcript-area {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-sonic-border) transparent;
+}
+
+.transcript-area::-webkit-scrollbar {
+  width: 4px;
+}
+
+.transcript-area::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.transcript-area::-webkit-scrollbar-thumb {
+  background: var(--color-sonic-border);
+  border-radius: 2px;
+}
+
+/* Recording active state — subtle background glow */
+.recording-active {
+  background: radial-gradient(
+    circle at center,
+    rgba(139, 92, 246, 0.05) 0%,
+    transparent 70%
+  );
+}
+
+/* Typing cursor blink */
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.animate-cursor-blink {
+  animation: cursor-blink 1s ease-in-out infinite;
+}

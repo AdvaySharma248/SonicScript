@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
@@ -30,7 +31,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-20">
           {/* Logo */}
-          <a href="/" className="flex items-center gap-2 group" id="logo-link">
+          <Link to="/" className="flex items-center gap-2 group" id="logo-link">
             <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-sonic-accent to-sonic-cyan flex items-center justify-center transition-transform group-hover:scale-110">
               <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
@@ -40,7 +41,7 @@ export default function Navbar() {
               <span className="gradient-text">Sonic</span>
               <span className="text-sonic-text">Script</span>
             </span>
-          </a>
+          </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-1">
@@ -54,13 +55,13 @@ export default function Navbar() {
                 {link.label}
               </a>
             ))}
-            <a
-              href="#cta"
+            <Link
+              to="/record"
               id="nav-try-now"
               className="ml-3 px-5 py-2.5 text-sm font-medium text-white bg-gradient-to-r from-sonic-accent to-sonic-cyan rounded-xl hover:opacity-90 transition-all duration-200 hover:shadow-lg hover:shadow-sonic-accent-glow"
             >
               Try Now — Free
-            </a>
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -98,13 +99,13 @@ export default function Navbar() {
                 {link.label}
               </a>
             ))}
-            <a
-              href="#cta"
+            <Link
+              to="/record"
               className="mx-2 mt-2 px-5 py-2.5 text-sm font-medium text-center text-white bg-gradient-to-r from-sonic-accent to-sonic-cyan rounded-xl"
               onClick={() => setMobileMenuOpen(false)}
             >
               Try Now — Free
-            </a>
+            </Link>
           </div>
         </div>
       </div>

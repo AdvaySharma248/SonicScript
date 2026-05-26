@@ -1,31 +1,45 @@
-import Navbar from './components/layout/Navbar'
-import Footer from './components/layout/Footer'
-import Hero from './components/features/Hero'
-import Features from './components/features/Features'
-import HowItWorks from './components/features/HowItWorks'
-import CTA from './components/features/CTA'
+// ===========================================
+// App.jsx — Root Application Component
+// ===========================================
+//
+// WHAT CHANGED IN DAY 4?
+// -----------------------
+// Before: App rendered all landing page sections directly
+// After:  App sets up React Router with two routes:
+//   /       → LandingPage (marketing page)
+//   /record → RecordPage (recording studio)
+//
+// WHY REACT ROUTER?
+// ------------------
+// React Router lets us have multiple "pages" in a Single Page App.
+// Instead of loading a new HTML file for each page (like traditional
+// websites), React Router swaps components in and out — making
+// page transitions instant and smooth.
+//
+// BrowserRouter — uses the browser's URL bar for navigation
+// Routes — container for all route definitions
+// Route — maps a URL path to a component
+// ===========================================
+
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+// Page components — each represents a full screen
+import LandingPage from './pages/LandingPage';
+import RecordPage from './pages/RecordPage';
 
 function App() {
   return (
-    <div className="relative min-h-screen overflow-hidden">
-      {/* Animated Background Orbs */}
-      <div className="bg-orb bg-orb-1" />
-      <div className="bg-orb bg-orb-2" />
-      <div className="bg-orb bg-orb-3" />
+    // BrowserRouter wraps the entire app to enable URL-based routing
+    <BrowserRouter>
+      <Routes>
+        {/* Home / Landing page — the marketing page visitors see first */}
+        <Route path="/" element={<LandingPage />} />
 
-      {/* Main Content */}
-      <div className="relative z-10">
-        <Navbar />
-        <main>
-          <Hero />
-          <Features />
-          <HowItWorks />
-          <CTA />
-        </main>
-        <Footer />
-      </div>
-    </div>
-  )
+        {/* Recording Studio — where users transcribe speech to text */}
+        <Route path="/record" element={<RecordPage />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;
