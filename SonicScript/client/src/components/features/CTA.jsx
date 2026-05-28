@@ -1,10 +1,17 @@
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
 export default function CTA() {
   return (
     <section id="cta" className="py-20 sm:py-28 px-4">
       <div className="max-w-4xl mx-auto">
-        <div className="glass-card relative overflow-hidden p-8 sm:p-12 md:p-16 text-center hover:transform-none">
+        <motion.div
+          className="glass-card relative overflow-hidden p-8 sm:p-12 md:p-16 text-center hover:transform-none"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 0.6 }}
+        >
           {/* Background Decorative Elements */}
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-sonic-accent via-sonic-cyan to-sonic-pink" />
           <div className="absolute -top-24 -right-24 w-48 h-48 bg-sonic-accent/10 rounded-full blur-3xl" />
@@ -12,12 +19,18 @@ export default function CTA() {
 
           {/* Content */}
           <div className="relative z-10">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-sonic-accent/20 bg-sonic-accent/5 mb-6">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2, duration: 0.4 }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-sonic-accent/20 bg-sonic-accent/5 mb-6"
+            >
               <span className="text-sm">🎉</span>
               <span className="text-xs sm:text-sm text-sonic-accent-light font-medium">
                 100% Free Forever — No API keys needed
               </span>
-            </div>
+            </motion.div>
 
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-5">
               Ready to start{' '}
@@ -25,13 +38,13 @@ export default function CTA() {
             </h2>
 
             <p className="text-sonic-text-dim text-base sm:text-lg max-w-xl mx-auto mb-10 leading-relaxed">
-              Join thousands of users turning speech into text with SonicScript. 
+              Join thousands of users turning speech into text with SonicScript.
               Set up takes less than 2 minutes.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link
-                to="/record"
+                to="/app"
                 id="cta-get-started"
                 className="w-full sm:w-auto px-10 py-4 text-base font-semibold text-white bg-gradient-to-r from-sonic-accent to-sonic-cyan rounded-2xl hover:opacity-90 transition-all duration-300 hover:shadow-xl hover:shadow-sonic-accent-glow hover:-translate-y-0.5 cursor-pointer"
               >
@@ -51,7 +64,7 @@ export default function CTA() {
               </a>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   )

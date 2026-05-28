@@ -2,42 +2,58 @@
 // App.jsx — Root Application Component
 // ===========================================
 //
-// WHAT CHANGED IN DAY 4?
-// -----------------------
-// Before: App rendered all landing page sections directly
-// After:  App sets up React Router with two routes:
-//   /       → LandingPage (marketing page)
-//   /record → RecordPage (recording studio)
+// DAY 5+6 ROUTING STRUCTURE:
+// ---------------------------
+//   /              → LandingPage (standalone, no sidebar)
+//   /app           → DashboardLayout → DashboardPage
+//   /app/record    → DashboardLayout → RecordPage
+//   /app/upload    → DashboardLayout → UploadPage
+//   /app/history   → DashboardLayout → HistoryPage
+//   /app/settings  → DashboardLayout → SettingsPage
+//   /record        → Redirect to /app/record (backward compat)
 //
-// WHY REACT ROUTER?
-// ------------------
-// React Router lets us have multiple "pages" in a Single Page App.
-// Instead of loading a new HTML file for each page (like traditional
-// websites), React Router swaps components in and out — making
-// page transitions instant and smooth.
-//
-// BrowserRouter — uses the browser's URL bar for navigation
-// Routes — container for all route definitions
-// Route — maps a URL path to a component
+// NESTED ROUTES:
+//   All /app/* routes share DashboardLayout (sidebar + top navbar).
+//   DashboardLayout uses <Outlet> to render child route components.
 // ===========================================
 
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { AnimatePresence } from 'framer-motion';
 
-// Page components — each represents a full screen
+// Standalone page (no sidebar)
 import LandingPage from './pages/LandingPage';
+
+// Dashboard layout wrapper
+import DashboardLayout from './layouts/DashboardLayout';
+
+// App pages (rendered inside DashboardLayout)
+import DashboardPage from './pages/DashboardPage';
 import RecordPage from './pages/RecordPage';
+import UploadPage from './pages/UploadPage';
+import HistoryPage from './pages/HistoryPage';
+import SettingsPage from './pages/SettingsPage';
 
 function App() {
   return (
-    // BrowserRouter wraps the entire app to enable URL-based routing
     <BrowserRouter>
-      <Routes>
-        {/* Home / Landing page — the marketing page visitors see first */}
-        <Route path="/" element={<LandingPage />} />
+      <AnimatePresence mode="wait">
+        <Routes>
+          {/* Home / Landing page — standalone, no sidebar */}
+          <Route path="/" element={<LandingPage />} />
 
-        {/* Recording Studio — where users transcribe speech to text */}
-        <Route path="/record" element={<RecordPage />} />
-      </Routes>
+          {/* Backward compatibility: /record → /app/record */}
+          <Route path="/record" element={<Navigate to="/app/record" replace />} />
+
+          {/* Dashboard routes — all share the sidebar layout */}
+          <Route path="/app" element={<DashboardLayout />}>
+            <Route index element={<DashboardPage />} />
+            <Route path="record" element={<RecordPage />} />
+            <Route path="upload" element={<UploadPage />} />
+            <Route path="history" element={<HistoryPage />} />
+            <Route path="settings" element={<SettingsPage />} />
+          </Route>
+        </Routes>
+      </AnimatePresence>
     </BrowserRouter>
   );
 }

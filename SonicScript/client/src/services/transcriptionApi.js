@@ -142,4 +142,48 @@ export const deleteTranscription = async (id) => {
   }
 };
 
+/**
+ * Upload an audio file to the server.
+ *
+ * Uses multipart/form-data encoding so the server receives the
+ * actual file (not a JSON string). Supports progress tracking
+ * via Axios's onUploadProgress callback.
+ *
+ * @param {File} file - The audio file to upload
+ * @param {Object} options - Upload options
+ * @param {Function} options.onUploadProgress - Progress callback
+ * @param {AbortSignal} options.signal - AbortController signal for cancellation
+ * @returns {Promise<Object>} Server response with file details
+ */
+export const uploadAudioFile = async (file, options = {}) => {
+  try {
+    // FormData is the standard way to send files via HTTP
+    // The key 'audio' must match the server's multer field name
+    const formData = new FormData();
+    formData.append('audio', file);
+
+    const response = await api.post('/upload', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      onUploadProgress: options.onUploadProgress,
+      signal: options.signal,
+      timeout: 60000, // 60 seconds for large files
+    });
+
+    return response.data;
+  } catch (error) {
+    if (error.name === 'CanceledError' || error.name === 'AbortError') {
+      throw error; // Re-throw cancellation errors
+    }
+    const message =
+      error.response?.data?.message ||
+      error.message ||
+      'Failed to upload audio file.';
+
+    throw new Error(message);
+  }
+};
+
 export default api;
+

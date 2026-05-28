@@ -1,3 +1,5 @@
+import { motion } from 'framer-motion';
+
 const steps = [
   {
     number: '01',
@@ -12,7 +14,7 @@ const steps = [
   {
     number: '02',
     title: 'AI Processes Audio',
-    description: 'Your audio is securely sent to Deepgram\'s API, where neural networks analyze every word.',
+    description: 'Your audio is securely processed by the speech recognition engine, analyzing every word in real time.',
     icon: (
       <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0112 15a9.065 9.065 0 00-6.23.693L5 14.5m14.8.8l1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0112 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5" />
@@ -31,12 +33,27 @@ const steps = [
   },
 ]
 
+const stepVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: (i) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, delay: i * 0.15, ease: 'easeOut' },
+  }),
+};
+
 export default function HowItWorks() {
   return (
     <section id="how-it-works" className="py-20 sm:py-28 px-4">
       <div className="max-w-5xl mx-auto">
         {/* Section Header */}
-        <div className="text-center mb-16">
+        <motion.div
+          className="text-center mb-16"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 0.5 }}
+        >
           <p className="text-sm font-semibold uppercase tracking-widest text-sonic-cyan mb-3">
             How It Works
           </p>
@@ -47,7 +64,7 @@ export default function HowItWorks() {
           <p className="text-sonic-text-dim text-base sm:text-lg max-w-xl mx-auto">
             From audio to text in under a minute. No complicated setup required.
           </p>
-        </div>
+        </motion.div>
 
         {/* Steps */}
         <div className="relative">
@@ -56,10 +73,15 @@ export default function HowItWorks() {
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-6">
             {steps.map((step, index) => (
-              <div
+              <motion.div
                 key={step.number}
                 id={`step-${step.number}`}
                 className="relative text-center group"
+                custom={index}
+                variants={stepVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: '-50px' }}
               >
                 {/* Step Number Circle */}
                 <div className="relative inline-flex items-center justify-center mb-6">
@@ -87,7 +109,7 @@ export default function HowItWorks() {
                     </svg>
                   </div>
                 )}
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>

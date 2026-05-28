@@ -1,5 +1,10 @@
+// ===========================================
+// Navbar — Enhanced with Framer Motion & Dashboard Link
+// ===========================================
+
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { motion } from 'framer-motion'
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
@@ -15,13 +20,17 @@ export default function Navbar() {
 
   const navLinks = [
     { label: 'Features', href: '#features' },
+    { label: 'Demo', href: '#demo' },
     { label: 'How It Works', href: '#how-it-works' },
-    { label: 'Get Started', href: '#cta' },
+    { label: 'Testimonials', href: '#testimonials' },
   ]
 
   return (
-    <nav
+    <motion.nav
       id="navbar"
+      initial={{ opacity: 0, y: -10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
           ? 'bg-sonic-darker/80 backdrop-blur-xl border-b border-sonic-border shadow-lg'
@@ -50,13 +59,22 @@ export default function Navbar() {
                 key={link.label}
                 href={link.href}
                 id={`nav-${link.label.toLowerCase().replace(/\s+/g, '-')}`}
-                className="px-4 py-2 text-sm text-sonic-text-dim hover:text-sonic-text rounded-lg transition-colors duration-200 hover:bg-white/5"
+                className="relative px-4 py-2 text-sm text-sonic-text-dim hover:text-sonic-text rounded-lg transition-colors duration-200 hover:bg-white/5 group"
               >
                 {link.label}
+                {/* Hover underline animation */}
+                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-sonic-accent to-sonic-cyan rounded-full transition-all duration-300 group-hover:w-3/4" />
               </a>
             ))}
             <Link
-              to="/record"
+              to="/app"
+              id="nav-dashboard"
+              className="ml-2 px-4 py-2 text-sm text-sonic-text-dim hover:text-sonic-text rounded-lg transition-colors duration-200 hover:bg-white/5"
+            >
+              Dashboard
+            </Link>
+            <Link
+              to="/app/record"
               id="nav-try-now"
               className="ml-3 px-5 py-2.5 text-sm font-medium text-white bg-gradient-to-r from-sonic-accent to-sonic-cyan rounded-xl hover:opacity-90 transition-all duration-200 hover:shadow-lg hover:shadow-sonic-accent-glow"
             >
@@ -85,7 +103,7 @@ export default function Navbar() {
         <div
           id="mobile-menu"
           className={`md:hidden overflow-hidden transition-all duration-300 ${
-            mobileMenuOpen ? 'max-h-64 opacity-100 pb-4' : 'max-h-0 opacity-0'
+            mobileMenuOpen ? 'max-h-80 opacity-100 pb-4' : 'max-h-0 opacity-0'
           }`}
         >
           <div className="flex flex-col gap-1 pt-2 border-t border-sonic-border">
@@ -100,7 +118,14 @@ export default function Navbar() {
               </a>
             ))}
             <Link
-              to="/record"
+              to="/app"
+              className="px-4 py-3 text-sm text-sonic-text-dim hover:text-sonic-text rounded-lg transition-colors hover:bg-white/5"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Dashboard
+            </Link>
+            <Link
+              to="/app/record"
               className="mx-2 mt-2 px-5 py-2.5 text-sm font-medium text-center text-white bg-gradient-to-r from-sonic-accent to-sonic-cyan rounded-xl"
               onClick={() => setMobileMenuOpen(false)}
             >
@@ -109,6 +134,6 @@ export default function Navbar() {
           </div>
         </div>
       </div>
-    </nav>
+    </motion.nav>
   )
 }

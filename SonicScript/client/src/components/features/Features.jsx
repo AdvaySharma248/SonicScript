@@ -1,3 +1,5 @@
+import { motion } from 'framer-motion';
+
 const features = [
   {
     icon: (
@@ -26,7 +28,7 @@ const features = [
       </svg>
     ),
     title: 'AI Transcription',
-    description: 'Powered by Deepgram\'s neural network for industry-leading accuracy across 30+ languages.',
+    description: 'Powered by cutting-edge speech recognition for industry-leading accuracy across 30+ languages.',
     gradient: 'from-sonic-pink to-rose-600',
   },
   {
@@ -61,12 +63,35 @@ const features = [
   },
 ]
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1 },
+  },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: 'easeOut' },
+  },
+};
+
 export default function Features() {
   return (
     <section id="features" className="py-20 sm:py-28 px-4">
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
-        <div className="text-center mb-16">
+        <motion.div
+          className="text-center mb-16"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 0.5 }}
+        >
           <p className="text-sm font-semibold uppercase tracking-widest text-sonic-accent-light mb-3">
             Features
           </p>
@@ -77,15 +102,22 @@ export default function Features() {
           <p className="text-sonic-text-dim text-base sm:text-lg max-w-2xl mx-auto">
             From recording to storing — SonicScript handles the entire speech-to-text pipeline with an intuitive, modern interface.
           </p>
-        </div>
+        </motion.div>
 
-        {/* Feature Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {/* Feature Cards Grid — Framer Motion stagger */}
+        <motion.div
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-50px' }}
+        >
           {features.map((feature, index) => (
-            <div
+            <motion.div
               key={feature.title}
               id={`feature-card-${index}`}
               className="glass-card p-6 sm:p-8 group cursor-default"
+              variants={cardVariants}
             >
               {/* Icon */}
               <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center text-white mb-5 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3`}>
@@ -99,9 +131,9 @@ export default function Features() {
               <p className="text-sm text-sonic-text-dim leading-relaxed">
                 {feature.description}
               </p>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   )

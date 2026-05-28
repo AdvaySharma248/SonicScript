@@ -2,23 +2,17 @@
 // LandingPage — Home / Marketing Page
 // ===========================================
 //
-// This extracts the existing landing page content from App.jsx
-// into its own dedicated page component. Now that we have React
-// Router, each "screen" gets its own page component.
-//
-// WHAT CHANGED?
-// --------------
-// Before: App.jsx rendered Navbar + Hero + Features + HowItWorks + CTA + Footer directly
-// After:  App.jsx handles routing; LandingPage renders the marketing content
-//
-// The CTA buttons now link to /record instead of # anchors
+// Day 5+6: Added Testimonials and DemoPreview sections.
+// CTA buttons now link to /app/* routes.
 // ===========================================
 
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import Hero from '../components/features/Hero';
 import Features from '../components/features/Features';
+import DemoPreview from '../components/features/DemoPreview';
 import HowItWorks from '../components/features/HowItWorks';
+import Testimonials from '../components/features/Testimonials';
 import CTA from '../components/features/CTA';
 
 /**
@@ -38,7 +32,9 @@ export default function LandingPage() {
         <main>
           <Hero />
           <Features />
+          <DemoPreview />
           <HowItWorks />
+          <Testimonials />
           <CTA />
         </main>
         <Footer />
